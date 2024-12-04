@@ -1,0 +1,17 @@
+version: '3'
+services:
+  mysql:
+    image: mysql:8.0
+    networks:
+      - shop-network
+    volumes:
+      - ./db/conf.d/:/etc/mysql/conf.d
+      - ./db/data/:/var/lib/mysql
+      - ./db/initdb.d:/docker-entrypoint-initdb.d
+    ports:
+      - "3306:3306"
+    env_file:
+      - ./db/.env
+networks:
+  shop-network:
+    driver: bridge
