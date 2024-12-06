@@ -2,6 +2,7 @@ package com.vision.shoppingmall.category.service;
 
 import com.vision.shoppingmall.category.model.entity.Category;
 import com.vision.shoppingmall.category.model.exception.CategoryNameDuplicationException;
+import com.vision.shoppingmall.category.model.exception.CategoryNotFoundException;
 import com.vision.shoppingmall.category.model.request.CreateCategoryRequest;
 import com.vision.shoppingmall.category.model.response.CategoryCreateResponse;
 import com.vision.shoppingmall.category.model.response.CategoryListResponse;
@@ -10,8 +11,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -37,5 +36,14 @@ public class CategoryService {
         .map(category ->
             new CategoryListResponse(category.getId(), category.getCategoryName())
         );
+  }
+  
+  public CategoryListResponse getCategoryById(Long id) {
+    //1. 해당 카테고리가 존재하지 않으면 오류 발생
+    //2. 존재하면 response 객체로 반환
+    Category category
+        = categoryRepository.findById(id)
+        .orElseThrow(CategoryNotFoundException::new);
+    return new CategoryListResponse(category.getId(), category.getCategoryName());
   }
 }

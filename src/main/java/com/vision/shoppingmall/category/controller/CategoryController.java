@@ -11,9 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
-import java.util.List;
-
 @Controller
 @RequestMapping("/categories")
 @RequiredArgsConstructor
@@ -50,6 +47,17 @@ public class CategoryController {
     return "redirect:/categories";
   }
 
+  @GetMapping("/update-category/{id}")
+  public String updateCategoryForm(Model model, @PathVariable Long id) {
+    CategoryListResponse category = categoryService.getCategoryById(id);
+    model.addAttribute("modalTitle", "카테고리 수정하기");
+    model.addAttribute("category", category);
+    return "category/category-form";
+  }
 
+//  @PostMapping("/update-category/{id}")
+//  public String updateCategory() {
+//
+//  }
 
 }
