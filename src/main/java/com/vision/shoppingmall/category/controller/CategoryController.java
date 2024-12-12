@@ -1,5 +1,6 @@
 package com.vision.shoppingmall.category.controller;
 
+import com.vision.shoppingmall.category.model.request.CategoryUpdateRequest;
 import com.vision.shoppingmall.category.model.request.CreateCategoryRequest;
 import com.vision.shoppingmall.category.model.response.CategoryListResponse;
 import com.vision.shoppingmall.category.service.CategoryService;
@@ -55,9 +56,19 @@ public class CategoryController {
     return "category/category-form";
   }
 
-//  @PostMapping("/update-category/{id}")
-//  public String updateCategory() {
-//
-//  }
+  @PostMapping("/update-category/{id}")
+  public String updateCategory(
+      @PathVariable Long id,
+      @ModelAttribute @Valid CategoryUpdateRequest request,
+      BindingResult bindingResult)
+  {
+    if(bindingResult.hasErrors())
+      throw new IllegalArgumentException(
+          bindingResult.getAllErrors().getFirst().getDefaultMessage()
+      );
+
+    categoryService.updateCategory(id, request);
+    return "redirect:/categories";
+  }
 
 }
